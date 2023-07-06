@@ -80,6 +80,7 @@ function buy(id) {
 
     cartList.push(PRODUCT); // The 'offer' field is not included within the cart products
     badge.innerText = cartList.length;
+    calculateTotal();
 }
 
 // Exercise 2
@@ -88,11 +89,18 @@ function cleanCart() {
 
     cartList = [];
     badge.innerText = 0;
+    calculateTotal();
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+    const totalPrice = document.querySelector("span#total_price");
+    const total = cartList.reduce(
+        (total, product) => total + product.price, 0
+    );
+
+    totalPrice.innerText = total;
 }
 
 // Exercise 4
