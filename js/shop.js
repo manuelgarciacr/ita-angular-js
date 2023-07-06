@@ -95,11 +95,22 @@ function cleanCart() {
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     const totalPrice = document.querySelector("span#total_price");
-    const total = cartList.reduce(
-        (total, product) => total + product.price, 0
+    // const total = cartList.reduce(
+    //     (total, product) => total + product.price, 0
+    // );
+    const formatterDecimals = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2     
+    });
+    const total = cart.reduce(
+        (total, product) => {
+            const SUBTOTAL = product.subtotalWithDiscount == 0 ? product.subtotal : product.subtotalWithDiscount;
+        
+            return total + SUBTOTAL
+        }, 0
     );
 
-    totalPrice.innerText = total;
+    totalPrice.innerText = formatterDecimals.format(total);
 }
 
 // Exercise 4
@@ -122,12 +133,25 @@ function generateCart() {
             cart[IDX].subtotal += product.price
         }
     });
+    applyPromotionsCart()
     calculateTotal();
 }
 
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+    cart.forEach(product => {
+        const ID = product.id;
+        const Q = product.quantity;
+        const PRICE = product.price;
+
+        if (ID == 1 && Q >= 3)
+            product.subtotalWithDiscount = Q * 10;
+        
+        if (ID == 3 && Q >= 10)
+            product.subtotalWithDiscount = Q * PRICE * 2 / 3;
+        
+    });
 }
 
 // Exercise 6
