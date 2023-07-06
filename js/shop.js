@@ -75,6 +75,11 @@ var total = 0;
 function buy(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    const {offer, ...PRODUCT} = products.find(product => product.id == id);
+    const badge = document.querySelector("span#count_product");
+
+    cartList.push(PRODUCT); // The 'offer' field is not included within the cart products
+    badge.innerText = cartList.length;
 }
 
 // Exercise 2
