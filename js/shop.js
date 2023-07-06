@@ -80,6 +80,7 @@ function buy(id) {
 
     cartList.push(PRODUCT); // The 'offer' field is not included within the cart products
     badge.innerText = cartList.length;
+    generateCart()
 }
 
 // Exercise 2
@@ -88,7 +89,7 @@ function cleanCart() {
 
     cartList = [];
     badge.innerText = 0;
-    calculateTotal();
+    generateCart()
 }
 
 // Exercise 3
@@ -134,7 +135,8 @@ function generateCart() {
         }
     });
     applyPromotionsCart()
-    calculateTotal();
+    // calculateTotal();
+    printCart()
 }
 
 // Exercise 5
@@ -157,6 +159,45 @@ function applyPromotionsCart() {
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    const TBODY = document.getElementById("cart_list");
+    const formatterDecimals = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2     
+    });
+    const formatterInteger = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0     
+    });
+    const formatedTotal = () => {
+        if (Number.isInteger(TOTAL))
+            return formatterInteger.format(TOTAL)
+        else
+            return formatterDecimals.format(TOTAL)
+    }
+    let TOTAL = 0;
+    
+    TBODY.innerHTML = "";
+    //generateCart();
+
+    cart.forEach(val => {
+        const SUBTOTAL = val.subtotalWithDiscount == 0 ? val.subtotal : val.subtotalWithDiscount;
+        TOTAL += SUBTOTAL;
+        const ROW = TBODY.insertRow(-1)
+        const TH = document.createElement("th");
+
+        TH.scope = "row";
+        TH.innerText = val.name;
+
+        ROW.appendChild(TH); 
+        ROW.insertCell(1).innerText = formatterDecimals.format(val.price);
+        ROW.insertCell(2).innerText = val.quantity;
+        ROW.insertCell(3).innerText = formatterDecimals.format(SUBTOTAL)
+    });
+
+    document.querySelector("span#total_price").innerText = formatedTotal()
 }
 
 
