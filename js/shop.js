@@ -80,7 +80,6 @@ function buy(id) {
 
     cartList.push(PRODUCT); // The 'offer' field is not included within the cart products
     badge.innerText = cartList.length;
-    calculateTotal();
 }
 
 // Exercise 2
@@ -107,6 +106,23 @@ function calculateTotal() {
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
+    cart = [];
+    cartList.forEach(product => {
+        const IDX = cart.findIndex(val => val.id == product.id)
+
+        if (IDX < 0) {
+            cart.push({
+                ...product, 
+                quantity: 1, 
+                subtotal: product.price, 
+                subtotalWithDiscount: 0
+            })
+        } else {
+            cart[IDX].quantity++;
+            cart[IDX].subtotal += product.price
+        }
+    });
+    calculateTotal();
 }
 
 // Exercise 5
