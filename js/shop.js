@@ -84,7 +84,10 @@ function buy(id) {
 
 // Exercise 2
 function cleanCart() {
+    const badge = document.querySelector("span#count_product");
 
+    cartList = [];
+    badge.innerText = 0;
 }
 
 // Exercise 3
