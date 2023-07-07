@@ -87,9 +87,11 @@ function buy(id) {
 function cleanCart() {
     const badge = document.querySelector("span#count_product");
 
-    cartList = [];
     badge.innerText = 0;
-    generateCart()
+    // cartList = [];
+    // generateCart()
+    cart = [];
+    printCart()
 }
 
 // Exercise 3
@@ -177,6 +179,7 @@ function printCart() {
         else
             return formatterDecimals.format(TOTAL)
     }
+    const BADGE = document.querySelector("span#count_product");
     let TOTAL = 0;
     
     TBODY.innerHTML = "";
@@ -187,16 +190,19 @@ function printCart() {
         TOTAL += SUBTOTAL;
         const ROW = TBODY.insertRow(-1)
         const TH = document.createElement("th");
-
+        const BTN = '<button class="btn btn-warning" onClick="removeFromCart(' + val.id +')"><i class="fa-solid fa-minus"></i></i></button>'
         TH.scope = "row";
         TH.innerText = val.name;
 
         ROW.appendChild(TH); 
         ROW.insertCell(1).innerText = formatterDecimals.format(val.price);
         ROW.insertCell(2).innerText = val.quantity;
-        ROW.insertCell(3).innerText = formatterDecimals.format(SUBTOTAL)
+        ROW.insertCell(3).innerText = formatterDecimals.format(SUBTOTAL);
+        ROW.insertCell(4).innerHTML = BTN;
     });
-
+    BADGE.innerText = cart.reduce(
+        (q, product) => q + product.quantity, 0
+    );
     document.querySelector("span#total_price").innerText = formatedTotal()
 }
 
@@ -211,7 +217,6 @@ function addToCart(id) {
     const {offer, ...PRODUCT} = products.find(product => product.id == id); 
     const IDX = cart.findIndex(val => val.id == id)
     const PRICE = PRODUCT.price;
-    const BADGE = document.querySelector("span#count_product");
 
     if (IDX < 0) {
         cart.push({
@@ -221,28 +226,45 @@ function addToCart(id) {
             subtotalWithDiscount: 0
         })
     } else {
-        cart[IDX].quantity++;
-        cart[IDX].subtotal += PRICE;
-        const Q = cart[IDX].quantity;
-        
-        if (id == 1 && Q >= 3)
-            cart[IDX].subtotalWithDiscount = Q * 10;
-        
-        if (id == 3 && Q >= 10)
-            cart[IDX].subtotalWithDiscount = Q * PRICE * 2 / 3
+        calculateTicket(IDX, 1)
     }
-    
-    BADGE.innerText = cart.reduce(
-        (q, product) => q + product.quantity, 0
-    );
     
     printCart()
 }
 
-// Exercise 8
+// Exercise 9
+function calculateTicket(idx, n) {
+    const PRODUCT = cart[idx];
+    const ID = PRODUCT.id;
+    const Q = PRODUCT.quantity += n;
+    const PRICE = PRODUCT.price;
+    PRODUCT.quantity = Q;
+    PRODUCT.subtotal = PRICE * Q;
+
+    if (Q <= 0) {
+        cart.splice(idx, 1);
+        return
+    }
+    
+    PRODUCT.subtotalWithDiscount = 0;
+
+    if (ID == 1 && Q >= 3)
+        PRODUCT.subtotalWithDiscount = Q * 10;
+    
+    if (ID == 3 && Q >= 10)
+        PRODUCT.subtotalWithDiscount = Q * PRICE * 2 / 3
+}
+
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    const {offer, ...PRODUCT} = products.find(product => product.id == id); 
+    const IDX = cart.findIndex(val => val.id == id)
+
+    if (IDX >= 0)
+        calculateTicket(IDX, -1);
+    
+    printCart()
 }
 
 function open_modal(){
