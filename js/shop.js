@@ -203,11 +203,40 @@ function printCart() {
 
 // ** Nivell II **
 
-// Exercise 7
+// Exercise 8
 function addToCart(id) {
     // Refactor previous code in order to simplify it 
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    const {offer, ...PRODUCT} = products.find(product => product.id == id); 
+    const IDX = cart.findIndex(val => val.id == id)
+    const PRICE = PRODUCT.price;
+    const BADGE = document.querySelector("span#count_product");
+
+    if (IDX < 0) {
+        cart.push({
+            ...PRODUCT, 
+            quantity: 1, 
+            subtotal: PRICE, 
+            subtotalWithDiscount: 0
+        })
+    } else {
+        cart[IDX].quantity++;
+        cart[IDX].subtotal += PRICE;
+        const Q = cart[IDX].quantity;
+        
+        if (id == 1 && Q >= 3)
+            cart[IDX].subtotalWithDiscount = Q * 10;
+        
+        if (id == 3 && Q >= 10)
+            cart[IDX].subtotalWithDiscount = Q * PRICE * 2 / 3
+    }
+    
+    BADGE.innerText = cart.reduce(
+        (q, product) => q + product.quantity, 0
+    );
+    
+    printCart()
 }
 
 // Exercise 8
