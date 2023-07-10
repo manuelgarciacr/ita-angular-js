@@ -1,0 +1,10 @@
+
+form .invalid-feedback {
+    display: block;
+    visibility: hidden;
+    height: 3rem;
+}
+
+.is-invalid~.invalid-feedback {
+    visibility: visible;
+}

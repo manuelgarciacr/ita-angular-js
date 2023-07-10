@@ -1,0 +1,39 @@
+.fs-8 {
+    font-size: 1rem!important;
+}
+
+* {
+    user-select: none;
+}
+
+table.table td {
+    text-align: right;
+}
+
+header {
+    background-image: url("../images/tienda.webp");
+    background-size: cover;
+    background-position: center;
+    opacity: .8;
+    color: black;
+    height: calc(50vh - 2rem);
+}
+
+header .container {
+    background-color: rgb(240, 248, 255, .6);
+    border-top-left-radius: 55%;
+    border-top-right-radius: 55%;
+}
+
+header h1, header p {
+    display: block;
+    z-index: 10;
+}
+
+section#grocery, section#clothes {
+    background-color: lightblue;
+}
+
+section#beauty {
+    background-color: azure;
+}

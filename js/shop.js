@@ -194,6 +194,7 @@ function printCart() {
         TH.scope = "row";
         TH.innerText = val.name;
 
+        ROW.classList.add("align-baseline");
         ROW.appendChild(TH); 
         ROW.insertCell(1).innerText = formatterDecimals.format(val.price);
         ROW.insertCell(2).innerText = val.quantity;
@@ -271,3 +272,21 @@ function open_modal(){
 	console.log("Open Modal");
 	printCart();
 }
+
+// Close expanded menu
+(function () {
+    'use strict'
+
+    // Fetch all the links on the header nav
+    var links = document.querySelectorAll('#navbar a');
+    const menuToggle = document.getElementById('navbar');
+    const bsCollapse = new bootstrap.Collapse(menuToggle, {toggle: false /* Menu collapsed */}); 
+
+     // Loop over the links and close the menu on click
+     Array.prototype.slice.call(links)
+     .forEach(function (link) {
+         link.addEventListener('click', function (event) {
+            setTimeout(() => bsCollapse.hide(), 1500) // This timeout prevents incorrect positioning
+         }, false)
+     })
+})()
